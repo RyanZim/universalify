@@ -1,5 +1,7 @@
 # universalify
 
+[![Travis branch](https://img.shields.io/travis/RyanZim/universalify/master.svg)](https://travis-ci.org/RyanZim/universalify)
+
 Make a callback- or promise-based function support both promises and callbacks.
 
 Uses the native promise implementation.
