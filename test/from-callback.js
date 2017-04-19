@@ -52,3 +52,10 @@ test('callback function error works with promises', t => {
     t.end()
   })
 })
+
+test('fromCallback() sets correct .name', t => {
+  t.plan(1)
+  const res = universalify.fromCallback(function hello () {})
+  t.is(res.name, 'hello')
+  t.end()
+})
