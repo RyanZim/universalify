@@ -20,6 +20,14 @@ exports.fromPromise = function (fn) {
   return Object.defineProperty(function () {
     const cb = arguments[arguments.length - 1]
     if (typeof cb !== 'function') return fn.apply(this, arguments)
-    else fn.apply(this, arguments).then(r => cb(null, r)).catch(cb)
+    else {
+      fn.apply(this, arguments)
+        .then(r => {
+          const result = cb(null, r)
+          if (result === undefined) return null
+          return result
+        })
+        .catch(cb)
+    }
   }, 'name', { value: fn.name })
 }
