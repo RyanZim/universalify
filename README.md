@@ -68,6 +68,14 @@ fn('Hi!', (error, result) => {
 })
 ```
 
+### `universalify.Promise`
+
+Exposes the Promise implementation. Defaults to `global.Promise`.
+
+```js
+universalify.Promise = require('your-promise-library')
+```
+
 ## License
 
 MIT
