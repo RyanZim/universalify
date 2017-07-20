@@ -63,3 +63,14 @@ test('fromPromise() sets correct .name', t => {
   t.is(res.name, 'hello')
   t.end()
 })
+
+test('fromPromise() handles an error in callback correctly', t => {
+  // We need to make sure that the callback isn't called twice if there's an
+  // error inside the callback. This should instead generate an unhandled
+  // promise rejection. tape swallows this rejection for us.
+  t.plan(1)
+  fn(1, 2, err => {
+    t.ifError(err, 'no error here')
+    throw new Error('some callback error')
+  })
+})
