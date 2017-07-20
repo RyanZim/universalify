@@ -1,6 +1,6 @@
 {
   "name": "universalify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Make a callback- or promise-based function support both promises and callbacks.",
   "keywords": [
     "callback",
