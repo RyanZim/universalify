@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "colortape": "^0.1.2",
+    "coveralls": "^3.0.1",
     "nyc": "^10.2.0",
     "standard": "^10.0.1",
     "tape": "^4.6.3"
