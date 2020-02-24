@@ -90,10 +90,14 @@ test('fromPromise() sets correct .name', t => {
 test('fromPromise() handles an error in callback correctly', t => {
   // We need to make sure that the callback isn't called twice if there's an
   // error inside the callback. This should instead generate an unhandled
-  // promise rejection. tape swallows this rejection for us.
-  t.plan(1)
+  // promise rejection. We verify one is created, with the correct message.
+  t.plan(2)
+  const errMsg = 'some callback error'
+  process.once('unhandledRejection', (err) => {
+    t.is(err.message, errMsg, 'correct error message')
+  })
   fn(1, 2, err => {
     t.ifError(err, 'no error here')
-    throw new Error('some callback error')
+    throw new Error(errMsg)
   })
 })
