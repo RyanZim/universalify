@@ -2,7 +2,7 @@
 const test = require('tape')
 const universalify = require('..')
 
-const fn = universalify.fromPromise(function (a, b, cb) {
+const fn = universalify.fromPromise(function (a, b) {
   return new Promise(resolve => {
     setTimeout(() => resolve([this, a, b]), 15)
   })
@@ -72,7 +72,7 @@ test('promise function error works with callbacks', t => {
 test('promise function error works with promises', t => {
   t.plan(2)
   errFn()
-    .then(arr => t.end('Promise should not resolve'))
+    .then(() => t.end('Promise should not resolve'))
     .catch(err => {
       t.assert(err, 'should error')
       t.is(err.message, 'test')

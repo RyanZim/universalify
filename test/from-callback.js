@@ -45,7 +45,7 @@ test('callback function error works with callbacks', t => {
 test('callback function error works with promises', t => {
   t.plan(2)
   errFn()
-    .then(arr => t.end('Promise should not resolve'))
+    .then(() => t.end('Promise should not resolve'))
     .catch(err => {
       t.assert(err, 'should error')
       t.is(err.message, 'test')
