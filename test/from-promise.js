@@ -2,7 +2,7 @@
 const test = require('tape')
 const universalify = require('..')
 
-const fn = universalify.fromPromise(function (a, b, cb) {
+const fn = universalify.fromPromise(function (a, b) {
   return new Promise(resolve => {
     setTimeout(() => resolve([this, a, b]), 15)
   })
@@ -16,7 +16,7 @@ const errFn = universalify.fromPromise(function () {
 
 test('promise function works with callbacks', t => {
   t.plan(4)
-  fn.call({a: 'a'}, 1, 2, (err, arr) => {
+  fn.call({ a: 'a' }, 1, 2, (err, arr) => {
     t.ifError(err, 'should not error')
     t.is(arr[0].a, 'a')
     t.is(arr[1], 1)
@@ -27,19 +27,19 @@ test('promise function works with callbacks', t => {
 
 test('promise function works with promises', t => {
   t.plan(3)
-  fn.call({a: 'a'}, 1, 2)
-  .then(arr => {
-    t.is(arr[0].a, 'a')
-    t.is(arr[1], 1)
-    t.is(arr[2], 2)
-    t.end()
-  })
-  .catch(t.end)
+  fn.call({ a: 'a' }, 1, 2)
+    .then(arr => {
+      t.is(arr[0].a, 'a')
+      t.is(arr[1], 1)
+      t.is(arr[2], 2)
+      t.end()
+    })
+    .catch(t.end)
 })
 
 test('promise function optional param works with callbacks', t => {
   t.plan(4)
-  fn.call({a: 'a'}, 1, (err, arr) => {
+  fn.call({ a: 'a' }, 1, (err, arr) => {
     t.ifError(err, 'should not error')
     t.is(arr[0].a, 'a')
     t.is(arr[1], 1)
@@ -50,14 +50,14 @@ test('promise function optional param works with callbacks', t => {
 
 test('promise function optional param works with promises', t => {
   t.plan(3)
-  fn.call({a: 'a'}, 1)
-  .then(arr => {
-    t.is(arr[0].a, 'a')
-    t.is(arr[1], 1)
-    t.is(arr[2], undefined)
-    t.end()
-  })
-  .catch(t.end)
+  fn.call({ a: 'a' }, 1)
+    .then(arr => {
+      t.is(arr[0].a, 'a')
+      t.is(arr[1], 1)
+      t.is(arr[2], undefined)
+      t.end()
+    })
+    .catch(t.end)
 })
 
 test('promise function error works with callbacks', t => {
@@ -72,12 +72,12 @@ test('promise function error works with callbacks', t => {
 test('promise function error works with promises', t => {
   t.plan(2)
   errFn()
-  .then(arr => t.end('Promise should not resolve'))
-  .catch(err => {
-    t.assert(err, 'should error')
-    t.is(err.message, 'test')
-    t.end()
-  })
+    .then(() => t.end('Promise should not resolve'))
+    .catch(err => {
+      t.assert(err, 'should error')
+      t.is(err.message, 'test')
+      t.end()
+    })
 })
 
 test('fromPromise() sets correct .name', t => {
@@ -90,10 +90,14 @@ test('fromPromise() sets correct .name', t => {
 test('fromPromise() handles an error in callback correctly', t => {
   // We need to make sure that the callback isn't called twice if there's an
   // error inside the callback. This should instead generate an unhandled
-  // promise rejection. tape swallows this rejection for us.
-  t.plan(1)
+  // promise rejection. We verify one is created, with the correct message.
+  t.plan(2)
+  const errMsg = 'some callback error'
+  process.once('unhandledRejection', (err) => {
+    t.is(err.message, errMsg, 'correct error message')
+  })
   fn(1, 2, err => {
     t.ifError(err, 'no error here')
-    throw new Error('some callback error')
+    throw new Error(errMsg)
   })
 })
