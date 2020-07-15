@@ -10,6 +10,10 @@ const errFn = universalify.fromCallback(function (cb) {
   setTimeout(() => cb(new Error('test')), 15)
 })
 
+const falseyErrFn = universalify.fromCallback(function (cb) {
+  setTimeout(() => cb(0, 15)) // eslint-disable-line standard/no-callback-literal
+})
+
 test('callback function works with callbacks', t => {
   t.plan(4)
   fn.call({ a: 'a' }, 1, 2, (err, arr) => {
@@ -49,6 +53,17 @@ test('callback function error works with promises', t => {
     .catch(err => {
       t.assert(err, 'should error')
       t.is(err.message, 'test')
+      t.end()
+    })
+})
+
+test('should correctly reject on falsey error values', t => {
+  t.plan(2)
+  falseyErrFn()
+    .then(() => t.end('Promise should not resolve'))
+    .catch(err => {
+      t.assert((err != null), 'should error')
+      t.is(err, 0)
       t.end()
     })
 })

@@ -8,7 +8,7 @@ exports.fromCallback = function (fn) {
         fn.call(
           this,
           ...args,
-          (err, res) => err ? reject(err) : resolve(res)
+          (err, res) => (err != null) ? reject(err) : resolve(res)
         )
       })
     }
