@@ -1,6 +1,9 @@
 'use strict'
 
-exports.fromCallback = function (fn) {
+exports.fromCallback = function (fn, falseIsError) {
+  if (typeof(falseIsError) == "undefined") {
+    falseIsError = true;
+  }
   return Object.defineProperty(function (...args) {
     if (typeof args[args.length - 1] === 'function') fn.apply(this, args)
     else {
@@ -8,7 +11,7 @@ exports.fromCallback = function (fn) {
         fn.call(
           this,
           ...args,
-          (err, res) => (err != null) ? reject(err) : resolve(res)
+          (err, res) => (err == null || (err == false && !falseIsError)) ? resolve(res) : reject(err)
         )
       })
     }

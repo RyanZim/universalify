@@ -14,6 +14,10 @@ const falseyErrFn = universalify.fromCallback(function (cb) {
   setTimeout(() => cb(0, 15)) // eslint-disable-line standard/no-callback-literal
 })
 
+const falseWhenNoError = universalify.fromCallback(function (cb) {
+  setTimeout(() => cb(false, 100))
+}, false)
+
 test('callback function works with callbacks', t => {
   t.plan(4)
   fn.call({ a: 'a' }, 1, 2, (err, arr) => {
@@ -64,6 +68,18 @@ test('should correctly reject on falsey error values', t => {
     .catch(err => {
       t.assert((err != null), 'should error')
       t.is(err, 0)
+      t.end()
+    })
+})
+
+test('allows false as a non error value as resolve', t => {
+  t.plan(1)
+  falseWhenNoError()
+    .then(res => {
+      t.is(res, 100)
+      t.end()
+    })
+    .catch(err => {
       t.end()
     })
 })
