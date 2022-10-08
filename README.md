@@ -1,6 +1,6 @@
 # universalify
 
-[![Travis branch](https://img.shields.io/travis/RyanZim/universalify/master.svg)](https://travis-ci.org/RyanZim/universalify)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/RyanZim/universalify/CI/master)
 ![Coveralls github branch](https://img.shields.io/coveralls/github/RyanZim/universalify/master.svg)
 ![npm](https://img.shields.io/npm/dm/universalify.svg)
 ![npm](https://img.shields.io/npm/l/universalify.svg)
