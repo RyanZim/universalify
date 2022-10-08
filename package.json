@@ -19,7 +19,7 @@
     "url": "git+https://github.com/RyanZim/universalify.git"
   },
   "scripts": {
-    "test": "standard && nyc tape test/*.js | colortape"
+    "test": "standard && nyc --reporter text --reporter lcovonly tape test/*.js | colortape"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
