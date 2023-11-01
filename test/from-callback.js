@@ -37,6 +37,16 @@ test('callback function works with promises', t => {
     .catch(t.end)
 })
 
+test('callbacks function works with promises without modify the original arg array', t => {
+  t.plan(2)
+  const array = [1, 2]
+  fn.apply(this, array).then((arr) => {
+    t.is(array.length, 2)
+    t.is(arr.length, 3)
+    t.end()
+  })
+})
+
 test('callback function error works with callbacks', t => {
   t.plan(2)
   errFn(err => {
